@@ -15,19 +15,19 @@ bwImg = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRES
 plt.imshow(bwImg, cmap = 'gray')
 plt.show()
 
-# Defining start and end points
-(maxx, maxy) = bwImg.shape
-minx, miny = 0, 0
-startx, starty = 0, 0
-endx, endy = maxx-1, maxy-1
-
-# Creating queue
-paths = Queue()
-currentPath = ['', [0,0]]
-paths.put(currentPath)
-maze = np.copy(bwImg)
-
 # Defining various functions
+def getStart():
+	for i in range(len(maze[0])):
+		if maze[0][i] == 255:
+			return (0, i)
+	print('No start found')
+
+def getEnd():
+	for i in range(len(maze[0])):
+		if maze[len(maze)-1][i] == 255:
+			return (len(maze)-1, i)
+	print('No end found')
+
 def reachEnd(path):
 	x, y = path[1]
 	if(x == endx and y == endy):
@@ -79,14 +79,30 @@ def tracePath(path):
 		elif move == 'D':
 			[x, y] = traceOnce(x,y,1,0)
 
+# Creating queue
+paths = Queue()
+maze = np.copy(bwImg)
+
+# Defining start and end points
+(maxx, maxy) = bwImg.shape
+minx, miny = 0, 0
+(startx, starty) = getStart()
+(endx, endy) = getEnd()
+print(startx, starty, endx , endy)
+
+# Setting start point
+currentPath = ['', [startx, starty]]
+paths.put(currentPath)
+
 # Main Algorithm
 print('Starting search...')
-while not reachEnd(currentPath) and not paths.empty():
+while(not reachEnd(currentPath) and not paths.empty()):
+	currentPath = paths.get()
 	for j in ['L', 'R', 'U', 'D']:
 		newPath = [currentPath[0] + j, calcXY(currentPath[1], j)]
 		if isValidPath(newPath):
 			paths.put(newPath)
-	currentPath = paths.get()
+
 if(currentPath[0]):
 	print('Shortest Path Found !!!')
 	# Tracing the shortest path

@@ -20,21 +20,19 @@ c = 0
 plt.imshow(bwImg, cmap = 'gray')
 plt.show()
 
-# Defining start and end points
-(maxx, maxy) = bwImg.shape
-minx, miny = 0, 0
-startx, starty = 0, 0
-endx, endy = maxx-1, maxy-1
-
-# Creating queue
-paths = Queue()
-currentPath = ['', [0,0]]
-maze = np.copy(bwImg)
-
-# List of images to put in video
-images = []
-
 # Defining various functions
+def getStart():
+	for i in range(len(maze[0])):
+		if maze[0][i] == 255:
+			return (0, i)
+	print('No start found')
+
+def getEnd():
+	for i in range(len(maze[0])):
+		if maze[len(maze)-1][i] == 255:
+			return (len(maze)-1, i)
+	print('No end found')
+
 def generate_video():
 	print('Creating Video....')
 	video_name = 'maze.avi'
@@ -108,14 +106,31 @@ def tracePath(path):
 		if(c%(rate/10) == 0):
 			images.append(np.copy(original_img))
 
+# Creating queue
+paths = Queue()
+maze = np.copy(bwImg)
+
+# Defining start and end points
+(maxx, maxy) = bwImg.shape
+minx, miny = 0, 0
+(startx, starty) = getStart()
+(endx, endy) = getEnd()
+
+# List of images to put in video
+images = []
+
+# Setting start point
+currentPath = ['', [startx, starty]]
+paths.put(currentPath)
+
 # Main Algorithm
 images.append(np.copy(img))
-while not reachEnd(currentPath) and not paths.empty():
+while(not reachEnd(currentPath) and not paths.empty()):
+	currentPath = paths.get()
 	for j in ['L', 'R', 'U', 'D']:
 		newPath = [currentPath[0] + j, calcXY(currentPath[1], j)]
 		if isValidPath(newPath):
 			paths.put(newPath)
-	currentPath = paths.get()
 	c += 1
 	if(c% rate == 0):
 		images.append(np.copy(img))
