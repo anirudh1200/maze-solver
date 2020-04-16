@@ -24,6 +24,7 @@ endx, endy = maxx-1, maxy-1
 # Creating queue
 paths = Queue()
 currentPath = ['', [0,0]]
+paths.put(currentPath)
 maze = np.copy(bwImg)
 
 # Defining various functions
@@ -59,9 +60,6 @@ def traceOnce(x,y,xd,yd):
 	y += yd
 	try:
 		img[x][y] = [0, 0, 255]
-		img[x+1][y] = [0, 0, 255]
-		img[x][y-1] = [0, 0, 255]
-		img[x+1][y-1] = [0, 0, 255]
 	except IndexError:
 		pass
 	else:
@@ -83,17 +81,19 @@ def tracePath(path):
 
 # Main Algorithm
 print('Starting search...')
-while not reachEnd(currentPath):
+while not reachEnd(currentPath) and not paths.empty():
 	for j in ['L', 'R', 'U', 'D']:
 		newPath = [currentPath[0] + j, calcXY(currentPath[1], j)]
 		if isValidPath(newPath):
 			paths.put(newPath)
 	currentPath = paths.get()
-print('Shortest Path Found !!!')
+if(currentPath[0]):
+	print('Shortest Path Found !!!')
+	# Tracing the shortest path
+	tracePath(currentPath)
 
-# Tracing the shortest path
-tracePath(currentPath)
-
-# Displaying solved maze
-plt.imshow(img, cmap = 'gray')
-plt.show()
+	# Displaying solved maze
+	plt.imshow(img, cmap = 'gray')
+	plt.show()
+else:
+	print('No path found...')

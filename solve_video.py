@@ -80,9 +80,6 @@ def calcXY(currentXY, move):
 def color(x, y):
 	try:
 		original_img[x][y] = [0, 0, 255]
-		original_img[x+1][y] = [0, 0, 255]
-		original_img[x][y-1] = [0, 0, 255]
-		original_img[x+1][y-1] = [0, 0, 255]
 	except IndexError:
 		pass
 	else:
@@ -113,7 +110,7 @@ def tracePath(path):
 
 # Main Algorithm
 images.append(np.copy(img))
-while not reachEnd(currentPath):
+while not reachEnd(currentPath) and not paths.empty():
 	for j in ['L', 'R', 'U', 'D']:
 		newPath = [currentPath[0] + j, calcXY(currentPath[1], j)]
 		if isValidPath(newPath):
@@ -122,9 +119,12 @@ while not reachEnd(currentPath):
 	c += 1
 	if(c% rate == 0):
 		images.append(np.copy(img))
-print('Shortest Path Found !!!')
+if(currentPath[0]):
+	print('Shortest Path Found !!!')
 
-# Tracing the shortest path
-tracePath(currentPath)
+	# Tracing the shortest path
+	tracePath(currentPath)
 
-generate_video()
+	generate_video()
+else:
+	print('No path found')
