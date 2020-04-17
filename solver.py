@@ -88,7 +88,6 @@ maze = np.copy(bwImg)
 minx, miny = 0, 0
 (startx, starty) = getStart()
 (endx, endy) = getEnd()
-print(startx, starty, endx , endy)
 
 # Setting start point
 currentPath = ['', [startx, starty]]
@@ -109,7 +108,7 @@ if(currentPath[0]):
 	tracePath(currentPath)
 
 	# Displaying solved maze
-	plt.imshow(img, cmap = 'gray')
+	plt.imshow(img)
 	plt.show()
 else:
 	print('No path found...')
