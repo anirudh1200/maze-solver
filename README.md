@@ -1,6 +1,13 @@
 # maze-solver
 A shortest path maze solving approach using breadth first search algorithm implemented in python that can even solve in real time using input from a camera
 
+Original | Searching... | Solved
+-------- | ------------ | ------
+<img src="https://github.com/anirudh1200/maze-solver/blob/master/out/input_maze.png" width="250px"> | <img src="https://github.com/anirudh1200/maze-solver/blob/master/out/solve_video.gif" width="250px"> | <img src="https://github.com/anirudh1200/maze-solver/blob/master/out/solved_maze.png" width="250px">
+
+### From videocam input
+<img src="https://github.com/anirudh1200/maze-solver/blob/master/out/from_mobile.gif" width="250px"> 
+
 ## Usage
 1. To solve an input image
 ```
